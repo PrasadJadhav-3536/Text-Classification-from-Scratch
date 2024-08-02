@@ -1,4 +1,3 @@
-# Text-Classification-from-Scratch
 
 
 <!DOCTYPE html>
