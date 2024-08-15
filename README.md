@@ -8,7 +8,6 @@
 <body>
 
  <h1>Emotion Detection Text Classification</h1>
-    
     <p>
         This project focuses on building a text classification system to detect emotions from text data. 
         The IEMOCAP dataset is used to create a structured dataset, followed by data preprocessing, 
