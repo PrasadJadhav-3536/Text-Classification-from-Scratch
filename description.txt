@@ -1,14 +1,43 @@
-Working on real time data 
-  1) Extracted data from IEMOCAP dataset which was raw data 
-  2) 5 folders had diffrent raw data in it{transcription s1 to s5}
-  3) Converted those folders into 5 excelsheets having 2 columns { dc.ipynb }
-      1] 1st column have text 
-      2] 2nd column have labels
-      3] here labels were not given in dataset hence it was given by model
-  4) Combined all excel sheets into 1 csv { Ccsv.ipynb }
-  5) to add more accurate labels { cds.ipynb }
-      1] we created a model using library 
-      2] created new csv file containing 1 extra column of correct labels
-  6) EDA of this new dataset { EDAcds.ipynb }      
-  7) after EDA we finalize dataset{ output.csv }
-  8) final model { finalcol.ipynb }
+                                        Text Classification for Emotion Detection
+
+Objective:
+The goal of this project is to build a text classification system that detects emotions in real-time data. Using the IEMOCAP dataset, the project involves preprocessing raw data, converting it into a structured dataset, performing data analysis and visualization, and developing a deep learning model to classify text based on emotional content.
+
+Dataset Preparation:
+The IEMOCAP dataset consists of raw data spread across five folders containing transcriptions (s1 to s5). The project begins by converting this raw data into a structured format, creating a dataset where each row contains a text snippet and its corresponding emotion label. This data is then saved as a CSV file for further processing.
+
+Data Preprocessing:
+  1.Text Cleaning:
+      -Convert text to lowercase.
+      -Remove punctuation.
+      -Tokenize text into words.
+      -Remove stopwords using the NLTK library.
+      -Lemmatize words to their base forms.
+  2.Label Encoding:
+      -Emotion labels are encoded into numerical values using LabelEncoder.
+  3.Data Splitting:
+      -The dataset is split into training and testing sets using an 80-20 split.
+
+Text Tokenization and Padding:
+The text data is tokenized into sequences of integers using Keras' Tokenizer, with a vocabulary size of 5000.
+These sequences are then padded to ensure uniform input length across samples, with a maximum sequence length of 100.
+Model Development:
+
+Architecture:
+The model is a Sequential deep learning model built using TensorFlow and Keras, featuring:
+An embedding layer that converts text data into dense vectors.
+A Bidirectional LSTM layer to capture sequential dependencies in both forward and backward directions.
+Dropout layers to prevent overfitting.
+A dense output layer with a softmax activation function to classify the text into one of the predefined emotion categories.
+Training:
+The model is compiled with a loss function of sparse_categorical_crossentropy and optimized using Adam. The training process includes callbacks such as early stopping, model checkpointing, and learning rate reduction to enhance performance.
+Model Evaluation:
+After training, the model's performance is evaluated on the test set, and accuracy is reported.
+
+Emotion Classification:
+A function is implemented to classify new, unseen text into the corresponding emotion category. The function preprocesses the input text, tokenizes and pads it, and then feeds it into the trained model to predict the emotion.
+
+Example Use Case:
+Given a new sentence like "I love spending time with you!", the model can predict the emotion (e.g., "joy") associated with the text.
+
+This project demonstrates the entire pipeline from raw data extraction to building a robust text classification system for emotion detection, integrating key data science and machine learning techniques.
