@@ -15,10 +15,11 @@
     </p>
 
     <h2>Project Overview</h2>
-    <ul> <li><strong>Objective:</strong> Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</li><li><strong>Dataset Preparation:</strong> The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</li>
-    </ul> 
+        <h4>Objective:</h4>
+<p>Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</p>
+        <h4>Dataset Preparation:</h4>
+<p></p>The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</p>
     <h2>Directory Structure</h2>
-    <div class="directory">
         <pre>
 ├── data/
 │   ├── s1/
@@ -32,7 +33,6 @@
 ├── README.md
 └── main.py
         </pre>
-    </div>
     <h2>Data Preprocessing</h2>
     <ul> <li><strong>Text Cleaning:</strong> The text is cleaned by converting it to lowercase, removing punctuation, tokenizing, removing stopwords, and lemmatizing words.</li>
         <li><strong>Label Encoding:</strong> Emotion labels are encoded into numerical values using <code>LabelEncoder</code>.</li>
