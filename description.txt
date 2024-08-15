@@ -1,10 +1,15 @@
                                         Text Classification for Emotion Detection
 
 Objective:
-The goal of this project is to build a text classification system that detects emotions in real-time data. Using the IEMOCAP dataset, the project involves preprocessing raw data, converting it into a structured dataset, performing data analysis and visualization, and developing a deep learning model to classify text based on emotional content.
+The goal of this project is to build a text classification system that detects emotions in real-time data. 
+Using the IEMOCAP dataset, the project involves preprocessing raw data, converting it into a structured
+dataset, performing data analysis and visualization, and developing a deep learning model to classify text based on emotional content.
 
 Dataset Preparation:
-The IEMOCAP dataset consists of raw data spread across five folders containing transcriptions (s1 to s5). The project begins by converting this raw data into a structured format, creating a dataset where each row contains a text snippet and its corresponding emotion label. This data is then saved as a CSV file for further processing.
+The IEMOCAP dataset consists of raw data spread across five folders containing transcriptions (s1 to s5). 
+The project begins by converting this raw data into a structured format, creating a dataset 
+where each row contains a text snippet and its corresponding emotion label. 
+This data is then saved as a CSV file for further processing.
 
 Data Preprocessing:
   1.Text Cleaning:
