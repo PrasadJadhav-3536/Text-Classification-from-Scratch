@@ -7,158 +7,165 @@
 </head>
 <body>
 
-<h1>Text Classification from Scratch</h1>
+ <h1>Emotion Detection Text Classification</h1>
+    
+    <p>
+        This project focuses on building a text classification system to detect emotions from text data. 
+        The IEMOCAP dataset is used to create a structured dataset, followed by data preprocessing, 
+        model development, and evaluation. The project is implemented using Python, TensorFlow, and Keras.
+    </p>
 
-<h2>Project Overview</h2>
-<p>This project demonstrates text sentiment classification starting from raw text files, specifically using the IMDB movie review dataset. The implementation leverages the <code>TextVectorization</code> layer for word splitting and indexing, and uses a simple 1D convolutional neural network (CNN) for classification. The project is optimized for GPU acceleration.</p>
+    <h2>Project Overview</h2>
+    <ul>
+        <li><strong>Objective:</strong> Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</li>
+        <li><strong>Dataset Preparation:</strong> The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</li>
+    </ul>
 
-<h2>Table of Contents</h2>
-<ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#setup">Setup</a></li>
-    <li><a href="#data-preparation">Data Preparation</a></li>
-    <li><a href="#data-loading">Data Loading</a></li>
-    <li><a href="#data-preprocessing">Data Preprocessing</a></li>
-    <li><a href="#model-building">Model Building</a></li>
-    <li><a href="#training">Training</a></li>
-    <li><a href="#evaluation">Evaluation</a></li>
-    <li><a href="#end-to-end-model">End-to-End Model</a></li>
-</ul>
+    <h2>Directory Structure</h2>
+    <div class="directory">
+        <pre>
+├── data/
+│   ├── s1/
+│   ├── s2/
+│   ├── s3/
+│   ├── s4/
+│   └── s5/
+├── output.csv
+├── model/
+│   └── best_model.h5
+├── README.md
+└── main.py
+        </pre>
+    </div>
 
-<h2 id="introduction">Introduction</h2>
-<p>This example shows how to perform text classification starting from raw text files on disk. We demonstrate the workflow using the unprocessed IMDB sentiment classification dataset and employ the <code>TextVectorization</code> layer for text preprocessing.</p>
+    <h2>Data Preprocessing</h2>
+    <ul>
+        <li><strong>Text Cleaning:</strong> The text is cleaned by converting it to lowercase, removing punctuation, tokenizing, removing stopwords, and lemmatizing words.</li>
+        <li><strong>Label Encoding:</strong> Emotion labels are encoded into numerical values using <code>LabelEncoder</code>.</li>
+    </ul>
 
-<h2 id="setup">Setup</h2>
-<p>To ensure the proper backend is used, set the Keras backend to TensorFlow:</p>
-<pre><code>import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
+    <h2>Model Development</h2>
+    <p>The model is developed using the following architecture:</p>
+    <ul>
+        <li><strong>Embedding Layer:</strong> Converts text data into dense vectors.</li>
+        <li><strong>Bidirectional LSTM Layers:</strong> Captures sequential dependencies in both forward and backward directions.</li>
+        <li><strong>Dropout Layer:</strong> Prevents overfitting.</li>
+        <li><strong>Dense Layer with Softmax Activation:</strong> Classifies the text into one of the predefined emotion categories.</li>
+    </ul>
 
-import keras
-import tensorflow as tf
-import numpy as np
-from keras import layers
-</code></pre>
+    <h2>Installation and Setup</h2>
+    <ol>
+        <li><strong>Clone the repository:</strong>
+            <div class="code-block">
+                <pre><code>git clone https://github.com/yourusername/emotion-detection.git
+cd emotion-detection</code></pre>
+            </div>
+        </li>
+        <li><strong>Install dependencies:</strong>
+            <div class="code-block">
+                <pre><code>pip install -r requirements.txt</code></pre>
+            </div>
+        </li>
+        <li><strong>Download NLTK stopwords and wordnet:</strong>
+            <div class="code-block">
+                <pre><code>import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')</code></pre>
+            </div>
+        </li>
+        <li><strong>Run the project:</strong>
+            <div class="code-block">
+                <pre><code>python main.py</code></pre>
+            </div>
+        </li>
+    </ol>
 
-<h2 id="data-preparation">Data Preparation</h2>
-<p>First, download and extract the IMDB dataset:</p>
-<pre><code>curl -O https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
-tar -xf aclImdb_v1.tar.gz
-</code></pre>
+    <h2>Code Snippets</h2>
 
-<h2 id="data-loading">Data Loading</h2>
-<p>Inspect the dataset structure:</p>
-<pre><code>ls aclImdb
-ls aclImdb/test
-ls aclImdb/train
-</code></pre>
-<p>Remove the unsupervised training data:</p>
-<pre><code>rm -r aclImdb/train/unsup
-</code></pre>
+    <h3>Preprocess Text</h3>
+    <div class="code-block">
+        <pre><code>import nltk
+import string
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 
-<h2 id="data-preprocessing">Data Preprocessing</h2>
-<p>Generate labeled datasets using <code>text_dataset_from_directory</code>:</p>
-<pre><code>batch_size = 32
-raw_train_ds = keras.utils.text_dataset_from_directory(
-    "aclImdb/train",
-    batch_size=batch_size,
-    validation_split=0.2,
-    subset="training",
-    seed=1337,
-)
-raw_val_ds = keras.utils.text_dataset_from_directory(
-    "aclImdb/train",
-    batch_size=batch_size,
-    validation_split=0.2,
-    subset="validation",
-    seed=1337,
-)
-raw_test_ds = keras.utils.text_dataset_from_directory(
-    "aclImdb/test", batch_size=batch_size
-)
-</code></pre>
+nltk.download('stopwords')
+nltk.download('wordnet')
 
-<h2 id="data-preprocessing">Data Preprocessing</h2>
-<p>Define a custom standardization function to clean the text:</p>
-<pre><code>import string
-import re
+stop_words = set(stopwords.words('english'))
+lemmatizer = WordNetLemmatizer()
 
-def custom_standardization(input_data):
-    lowercase = tf.strings.lower(input_data)
-    stripped_html = tf.strings.regex_replace(lowercase, "&lt;br /&gt;", " ")
-    return tf.strings.regex_replace(
-        stripped_html, f"[{re.escape(string.punctuation)}]", ""
-    )
-</code></pre>
-<p>Create a <code>TextVectorization</code> layer and adapt it to the training data:</p>
-<pre><code>max_features = 20000
-embedding_dim = 128
-sequence_length = 500
+def preprocess_text(text):
+    text = text.lower()
+    text = ''.join([char for char in text if char not in string.punctuation])
+    words = text.split()
+    words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words]
+    return ' '.join(words)</code></pre>
+    </div>
 
-vectorize_layer = keras.layers.TextVectorization(
-    standardize=custom_standardization,
-    max_tokens=max_features,
-    output_mode="int",
-    output_sequence_length=sequence_length,
-)
+    <h3>Model Definition</h3>
+    <div class="code-block">
+        <pre><code>from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Embedding, Dense, Dropout, Bidirectional
 
-text_ds = raw_train_ds.map(lambda x, y: x)
-vectorize_layer.adapt(text_ds)
-</code></pre>
-<p>Vectorize the data:</p>
-<pre><code>def vectorize_text(text, label):
-    text = tf.expand_dims(text, -1)
-    return vectorize_layer(text), label
+model = Sequential()
+model.add(Embedding(input_dim=5000, output_dim=100, input_length=100))
+model.add(Bidirectional(LSTM(128, return_sequences=True)))
+model.add(Dropout(0.5))
+model.add(Bidirectional(LSTM(64)))
+model.add(Dense(8, activation='softmax'))  # 8 emotions</code></pre>
+    </div>
 
-train_ds = raw_train_ds.map(vectorize_text)
-val_ds = raw_val_ds.map(vectorize_text)
-test_ds = raw_test_ds.map(vectorize_text)
+    <h3>Model Training</h3>
+    <div class="code-block">
+        <pre><code>from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-train_ds = train_ds.cache().prefetch(buffer_size=10)
-val_ds = val_ds.cache().prefetch(buffer_size=10)
-test_ds = test_ds.cache().prefetch(buffer_size=10)
-</code></pre>
+checkpoint = ModelCheckpoint('model/best_model.h5', monitor='val_loss', save_best_only=True, mode='min')
+earlyStopping = EarlyStopping(monitor='val_loss', patience=3, verbose=1, mode='min')
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=2, min_lr=0.001)
 
-<h2 id="model-building">Model Building</h2>
-<p>Build a simple 1D convolutional neural network:</p>
-<pre><code>inputs = keras.Input(shape=(None,), dtype="int64")
-x = layers.Embedding(max_features, embedding_dim)(inputs)
-x = layers.Dropout(0.5)(x)
-x = layers.Conv1D(128, 7, padding="valid", activation="relu", strides=3)(x)
-x = layers.Conv1D(128, 7, padding="valid", activation="relu", strides=3)(x)
-x = layers.GlobalMaxPooling1D()(x)
-x = layers.Dense(128, activation="relu")(x)
-x = layers.Dropout(0.5)(x)
-predictions = layers.Dense(1, activation="sigmoid", name="predictions")(x)
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2, callbacks=[checkpoint, earlyStopping, reduce_lr])</code></pre>
+    </div>
 
-model = keras.Model(inputs, predictions)
+    <h3>Text Classification Example</h3>
+    <div class="code-block">
+        <pre><code>def classify_text(text):
+    text = preprocess_text(text)
+    sequence = tokenizer.texts_to_sequences([text])
+    padded_sequence = pad_sequences(sequence, padding='post', maxlen=100)
+    prediction = model.predict(padded_sequence)
+    emotion = label_encoder.inverse_transform([prediction.argmax()])
+    return emotion[0]
 
-model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-</code></pre>
+new_text = "I love spending time with you!"
+predicted_emotion = classify_text(new_text)
+print(f"Text: {new_text}")
+print(f"Predicted Emotion: {predicted_emotion}")</code></pre>
+    </div>
 
-<h2 id="training">Training</h2>
-<p>Train the model:</p>
-<pre><code>epochs = 15
-model.fit(train_ds, validation_data=val_ds, epochs=epochs)
-</code></pre>
+    <h2>Evaluation and Results</h2>
+    <p>
+        The model's performance is evaluated on a test set, and accuracy is reported. The system can classify new text inputs into predefined emotion categories such as "joy," "sadness," "anger," etc.
+    </p>
 
-<h2 id="evaluation">Evaluation</h2>
-<p>Evaluate the model on the test set:</p>
-<pre><code>model.evaluate(test_ds)
-</code></pre>
+    <h2>Example Usage</h2>
+    <div class="code-block">
+        <pre><code>new_text = "I love spending time with you!"
+predicted_emotion = classify_text(new_text)
+print(f"Text: {new_text}")
+print(f"Predicted Emotion: {predicted_emotion}")</code></pre>
+    </div>
 
-<h2 id="end-to-end-model">End-to-End Model</h2>
-<p>Create an end-to-end model for processing raw strings:</p>
-<pre><code>inputs = keras.Input(shape=(1,), dtype="string")
-indices = vectorize_layer(inputs)
-outputs = model(indices)
+    <h2>Contributing</h2>
+    <p>
+        Contributions are welcome! Please create a pull request or open an issue for any suggestions or improvements.
+    </p>
 
-end_to_end_model = keras.Model(inputs, outputs)
-end_to_end_model.compile(
-    loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"]
-)
-
-end_to_end_model.evaluate(raw_test_ds)
-</code></pre>
+    <h2>License</h2>
+    <p>
+        This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.
+    </p>
 
 </body>
 </html>
