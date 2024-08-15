@@ -15,9 +15,8 @@
     </p>
 
     <h2>Project Overview</h2>
-    <ul> <li><strong>Objective:</strong> Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</li>
-        <li><strong>Dataset Preparation:</strong> The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</li>
-    </ul>
+    <ul> <li><strong>Objective:</strong> Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</li><li><strong>Dataset Preparation:</strong> The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</li>
+    </ul> 
     <h2>Directory Structure</h2>
     <div class="directory">
         <pre>
