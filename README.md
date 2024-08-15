@@ -13,13 +13,12 @@
         The IEMOCAP dataset is used to create a structured dataset, followed by data preprocessing, 
         model development, and evaluation. The project is implemented using Python, TensorFlow, and Keras.
     </p>
-
-    <h2>Project Overview</h2>
-        <h4>Objective:</h4>
+ <h2>Project Overview</h2>
+<h4>Objective:</h4>
 <p>Develop a text classification system that detects emotions in real-time data using the IEMOCAP dataset.</p>
-        <h4>Dataset Preparation:</h4>
+<h4>Dataset Preparation:</h4>
 <p></p>The raw data from IEMOCAP is processed and converted into a structured format, resulting in a CSV file containing text and corresponding emotion labels.</p>
-    <h2>Directory Structure</h2>
+<h2>Directory Structure</h2>
         <pre>
 ├── data/
 │   ├── s1/
